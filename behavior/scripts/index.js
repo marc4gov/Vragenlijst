@@ -30,39 +30,35 @@ exports.handle = function handle(client) {
     }
   })
 
-  const handleQ1 = client.createStep({
+  const collectPlaatsDelict = client.createStep({
     satisfied() {
-      return false
+      return Boolean(client.getConversationState().plaats)
     },
 
     prompt() {
-      client.addTextResponse('Hallo naam, ik bedoel Marc')
+      // Need to prompt user for city
+      console.log('Vraag gebruiker om plaats delict')
       client.done()
-    }
+    },
   })
 
-  const handleQ2 = client.createStep({
+  const provideCoord = client.createStep({
     satisfied() {
       return false
     },
 
     prompt() {
-      client.addTextResponse('Bedankt voor uw medewerking')
+      // Need to provide coordinaten
       client.done()
-    }
+    },
   })
 
   client.runFlow({
-    classifications: {
-      goodbye: 'goodbye',
-      greeting: 'greeting'
-    },
+    classifications: {},
     streams: {
-      goodbye: handleGoodbye,
-      greeting: handleGreeting,
-      main: 'onboarding',
-      onboarding: [sayHello],
-      end: [untrained]
+      main: 'getPlaatsDelict',
+      hi: [sayHello],
+      getPlaatsDelict: [collectPlaatsDelict, provideCoord],
     }
   })
 }
