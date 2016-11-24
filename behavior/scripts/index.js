@@ -48,7 +48,7 @@ exports.handle = function handle(client) {
     extractInfo() {
       const pld = firstOfEntityRole(client.getMessagePart(), 'plaats_delict')
 
-      if (city) {
+      if (pld) {
         client.updateConversationState({
           plaats: pld,
         })
