@@ -30,24 +30,24 @@ exports.handle = function handle(client) {
     }
   })
 
-  const handleGreeting = client.createStep({
+  const handleQ1 = client.createStep({
     satisfied() {
       return false
     },
 
     prompt() {
-      client.addTextResponse('Hello world, I mean human')
+      client.addTextResponse('Hallo naam, ik bedoel Marc')
       client.done()
     }
   })
 
-  const handleGoodbye = client.createStep({
+  const handleQ2 = client.createStep({
     satisfied() {
       return false
     },
 
     prompt() {
-      client.addTextResponse('See you later!')
+      client.addTextResponse('Bedankt voor uw medewerking')
       client.done()
     }
   })
