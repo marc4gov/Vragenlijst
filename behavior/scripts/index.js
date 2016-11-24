@@ -1,5 +1,15 @@
 'use strict'
 
+const firstOfEntityRole = function(message, entity, role) {
+  role = role || 'generic';
+
+  const slots = message.slots
+  const entityValues = message.slots[entity]
+  const valsForRole = entityValues ? entityValues.values_by_role[role] : null
+
+  return valsForRole ? valsForRole[0] : null
+}
+
 exports.handle = function handle(client) {
   const sayHello = client.createStep({
     satisfied() {
@@ -35,12 +45,23 @@ exports.handle = function handle(client) {
       return Boolean(client.getConversationState().plaats)
     },
 
+    extractInfo() {
+      const pld = firstOfEntityRole(client.getMessagePart(), 'plaats_delict')
+
+      if (city) {
+        client.updateConversationState({
+          plaats: pld,
+        })
+
+        console.log('Gebruiker wil: ', pld.value)
+      }
+    },
     prompt() {
-      // Need to prompt user for city
-      console.log('Vraag gebruiker om plaats delict')
+      client.addResponse('app:response:name:prompt/plaats_delict')
       client.done()
     },
   })
+
 
   const provideCoord = client.createStep({
     satisfied() {
